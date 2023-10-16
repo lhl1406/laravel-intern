@@ -1,0 +1,6 @@
+del_flg:
+  0: 有効|VALID
+  1: 無効|INVALID
+
+pagination_limit: 100
+search_hint_limit: 10
