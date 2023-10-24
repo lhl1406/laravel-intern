@@ -29,7 +29,7 @@ abstract class BaseRepository {
         $this->model = app()->make(
             $this->getModel()
         );
-    }
+    }   
 
     /**
     * Soft delete entity
