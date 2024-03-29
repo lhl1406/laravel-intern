@@ -10,7 +10,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AddEditUserRequest extends FormRequest
 {
-        /**
+    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
@@ -26,10 +26,10 @@ class AddEditUserRequest extends FormRequest
     public function rules(): array
     {
         $requriedOrNullable = isset($this->id) ? 'nullable' : 'required';
-        if(! isset($this->id)) {
+        if (! isset($this->id)) {
             $requriedOrNullableForPasswordConfirm = 'required';
         } else {
-            if(isset($this->password)) {
+            if (isset($this->password)) {
                 $requriedOrNullableForPasswordConfirm = 'required';
             } else {
                 $requriedOrNullableForPasswordConfirm = 'nullable';
@@ -43,7 +43,7 @@ class AddEditUserRequest extends FormRequest
                 'required',
                 new KatakanaMaxLength(100),
             ],
-            'email'=> [
+            'email' => [
                 'required',
                 'email',
                 'unique:user,email,'.$id,
@@ -58,7 +58,7 @@ class AddEditUserRequest extends FormRequest
                 'required',
                 'date_format:"d/m/Y"',
             ],
-            'position_id' =>[
+            'position_id' => [
                 'required',
                 new NotNull(),
                 new OnlyNumberAndAlphabetOneByte(),
@@ -73,18 +73,19 @@ class AddEditUserRequest extends FormRequest
                 $requriedOrNullableForPasswordConfirm,
                 'max:20',
                 'same:password',
-            ]
+            ],
         ];
     }
 
-     /**
+    /**
      * Get length of value by atrribute name
-     * 
-     * @param string $attributeName
-     * @return integer 
+     *
+     * @return int
      */
-    public function getLenghtOfValueByAttributeName(string $attributeName) {
+    public function getLenghtOfValueByAttributeName(string $attributeName)
+    {
         $attribute = $this->get($attributeName);
+
         return strlen($attribute);
     }
 
@@ -99,7 +100,7 @@ class AddEditUserRequest extends FormRequest
             ]),
             'email.required' => ConfigUtil::getMessage('EBT001', [':attribute']),
             'email.email' => ConfigUtil::getMessage('EBT004'),
-            'email.unique'=> ConfigUtil::getMessage('EBT019'),
+            'email.unique' => ConfigUtil::getMessage('EBT019'),
             'email.max' => ConfigUtil::getMessage('EBT002', [
                 ':attribute',
                 ':max',
@@ -110,13 +111,13 @@ class AddEditUserRequest extends FormRequest
             'started_date.date_format' => ConfigUtil::getMessage('EBT008', [':attribute']),
             'position_id.required' => ConfigUtil::getMessage('EBT001', [':attribute']),
             'password.required' => ConfigUtil::getMessage('EBT001', [':attribute']),
-            'password.regex' =>  ConfigUtil::getMessage('EBT025', [':attribute']),
+            'password.regex' => ConfigUtil::getMessage('EBT025', [':attribute']),
             'password.max' => ConfigUtil::getMessage('EBT002', [
                 ':attribute',
                 ':max',
                 $this->getLenghtOfValueByAttributeName('password'),
             ]),
-            'password.between' =>  ConfigUtil::getMessage('EBT023'),
+            'password.between' => ConfigUtil::getMessage('EBT023'),
             'password_confirmation.required' => ConfigUtil::getMessage('EBT001', [':attribute']),
             'password_confirmation.same' => ConfigUtil::getMessage('EBT030'),
             'password_confirmation.max' => ConfigUtil::getMessage('EBT002', [

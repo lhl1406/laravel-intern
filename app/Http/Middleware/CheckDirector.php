@@ -17,10 +17,10 @@ class CheckDirector
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->position_id == ValueUtil::constToValue('user.user_flg.DIRECTOR')) {
+        if (Auth::user()->position_id == ValueUtil::constToValue('user.user_flg.DIRECTOR')) {
             return $next($request);
         }
-        
+
         return redirect()->route('login');
     }
 }

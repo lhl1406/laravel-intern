@@ -21,12 +21,12 @@ class UserFactory extends Factory
             'name' => 'Director',
             'email' => 'director@gmail.com',
             'password' => Hash::make('password'),
-            'group_id' =>  1,
+            'group_id' => 1,
             'started_date' => now(),
             'position_id' => 0,
             'created_date' => now(),
             'updated_date' => now(),
         ];
-        
+
     }
 }

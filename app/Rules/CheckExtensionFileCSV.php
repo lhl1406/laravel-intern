@@ -13,9 +13,10 @@ class CheckExtensionFileCSV implements ValidationRule
      *
      * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
-    public function validate(string $attribute, mixed $value, Closure $fail): void {
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
 
-        if($value ->getClientmimeType() !== 'text/csv') {
+        if ($value->getClientmimeType() !== 'text/csv') {
             $fail(ConfigUtil::getMessage('EBT033', ['CSV']));
         }
     }

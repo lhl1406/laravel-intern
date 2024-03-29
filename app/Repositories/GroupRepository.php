@@ -3,38 +3,42 @@
 namespace App\Repositories;
 
 use App\Models\Group;
-use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Log;
 
-class GroupRepository extends BaseRepository 
+class GroupRepository extends BaseRepository
 {
-    public function getModel() {
+    public function getModel()
+    {
         return Group::class;
     }
 
-    public function getAll() {
+    public function getAll()
+    {
         try {
             $groupList = $this->model->orderBy('name')
-            ->whereNull('deleted_date')
-            ->get()
-            ->toArray();
+                ->whereNull('deleted_date')
+                ->get()
+                ->toArray();
         } catch (\Exception $e) {
-            Log::error($e->getMessage()); 
+            Log::error($e->getMessage());
+
             return [];
         }
+
         return $groupList;
     }
 
-    public function getGroupList($limit = 10) {
+    public function getGroupList($limit = 10)
+    {
         try {
             $groupList = $this->model->orderBy('id', 'desc')
                 ->paginate($limit);
         } catch (\Exception $e) {
-            Log::error($e->getMessage()); 
+            Log::error($e->getMessage());
+
             return [];
         }
-        
+
         return $groupList;
     }
-
 }

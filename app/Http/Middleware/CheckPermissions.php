@@ -10,29 +10,30 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckPermissions
 {
-       /**
+    /**
      * Handle check (director) with position id' .
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response {
+    public function handle(Request $request, Closure $next): Response
+    {
         $positions = collect([
-                ValueUtil::constToValue('user.user_flg.DEPARTMENT_LEADER'),
-                ValueUtil::constToValue('user.user_flg.TEAM_LEADER'),
-                ValueUtil::constToValue('user.user_flg.TEAM_MEMBER'),
+            ValueUtil::constToValue('user.user_flg.DEPARTMENT_LEADER'),
+            ValueUtil::constToValue('user.user_flg.TEAM_LEADER'),
+            ValueUtil::constToValue('user.user_flg.TEAM_MEMBER'),
         ]);
 
-        if(Auth::user()->position_id == ValueUtil::constToValue('user.user_flg.DIRECTOR')) {
+        if (Auth::user()->position_id == ValueUtil::constToValue('user.user_flg.DIRECTOR')) {
             return $next($request);
         }
 
-        if($positions->contains(Auth::user()->position_id)) {
-            if( isset($request->id)) {
-                if(Auth::id() != $request->id) {
+        if ($positions->contains(Auth::user()->position_id)) {
+            if (isset($request->id)) {
+                if (Auth::id() != $request->id) {
                     return redirect()->route('logout');
                 }
-            } 
-        } 
+            }
+        }
 
         return $next($request);
     }

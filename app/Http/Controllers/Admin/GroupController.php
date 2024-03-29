@@ -8,39 +8,43 @@ use App\Libs\ConfigUtil;
 use App\Libs\CSVUtil;
 use App\Repositories\GroupRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Response;
 
 class GroupController extends Controller
 {
     private $userRepository;
+
     private $groupRepository;
-    public function __construct(UserRepository $userRepository, GroupRepository $groupRepository) {
+
+    public function __construct(UserRepository $userRepository, GroupRepository $groupRepository)
+    {
         $this->userRepository = $userRepository;
         $this->groupRepository = $groupRepository;
     }
 
-     /**
+    /**
      * Render screen A-01-GRO
-     * 
+     *
      * @return \Illuminate\Contracts\View\View
      */
-    public function index() {
-        $groupList = $this->groupRepository->getGroupList();        
+    public function index()
+    {
+        $groupList = $this->groupRepository->getGroupList();
         $pageTitle = 'Group List';
         $groupList = $groupList->onEachSide($groupList->lastPage());
-        
-        foreach($groupList as $group) {
+
+        foreach ($groupList as $group) {
             $group->user_leader = $this->userRepository->getById($group->group_leader_id);
         }
 
         return view('admin.group-list.index', compact('groupList', 'pageTitle'));
     }
 
-    public function import(ImportCSVRequest $request) {
+    public function import(ImportCSVRequest $request)
+    {
         $file = $request->file('file');
         $csvFile = fopen($file->getPathname(), 'r');
 
-        if(CSVUtil::checkForEmptyEndLine($file->getPathname())) {
+        if (CSVUtil::checkForEmptyEndLine($file->getPathname())) {
             $row = count(file($file->getPathname())) + 1;
 
             return redirect()->route('admin.group.index')
@@ -55,19 +59,19 @@ class GroupController extends Controller
             'name' => 'Group Name',
             'note' => 'Group Note',
             'group_leader_id' => 'Group Leader',
-            'group_floor_number'=> 'Floor Number',
+            'group_floor_number' => 'Floor Number',
             'isDelete' => 'Delete',
         ];
 
         $result = CSVUtil::readCSVFile($csvFile, $headersOfFile);
 
-        if(empty($result) || $headersOfFile[0] == null) {
+        if (empty($result) || $headersOfFile[0] == null) {
             return redirect()->route('admin.group.index')
                 ->with('success', false)
                 ->with('message', ConfigUtil::getMessage('EBT036', ['CSV Data']));
         }
 
-        if(! empty($result) && isset($result['error'])) {
+        if (! empty($result) && isset($result['error'])) {
             return redirect()->route('admin.group.index')
                 ->with('success', false)
                 ->with('message', $result['error']);
@@ -75,7 +79,7 @@ class GroupController extends Controller
 
         $errorMessages = CSVUtil::checkFormatHeader($headersOfFile, array_values($headerCombine));
 
-        if(! empty($errorMessages)) {
+        if (! empty($errorMessages)) {
             return redirect()->route('admin.group.index')
                 ->with('success', false)
                 ->with('message', $errorMessages);
@@ -85,7 +89,7 @@ class GroupController extends Controller
 
         $errorMessages = CSVUtil::checkContentFile($result);
 
-        if(! empty($errorMessages)) {
+        if (! empty($errorMessages)) {
             return redirect()->route('admin.group.index')
                 ->with('success', false)
                 ->with('message', $errorMessages);
@@ -93,9 +97,9 @@ class GroupController extends Controller
 
         $data = [];
 
-        foreach($result as $index => $group) {
-            $lineData = [];    
-            foreach($headerCombine as $key => $value) {
+        foreach ($result as $index => $group) {
+            $lineData = [];
+            foreach ($headerCombine as $key => $value) {
                 $lineData[$key] = $group[$value];
             }
 
@@ -104,10 +108,10 @@ class GroupController extends Controller
 
         $result = $this->groupRepository->saveMany($data);
 
-        if(! $result) {
+        if (! $result) {
             return redirect()->route('admin.group.index')
-            ->with('success', false)
-            ->with('message', ConfigUtil::getMessage('EBT090'));
+                ->with('success', false)
+                ->with('message', ConfigUtil::getMessage('EBT090'));
         }
 
         return redirect()->route('admin.group.index')

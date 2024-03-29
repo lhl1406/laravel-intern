@@ -23,13 +23,13 @@ class UserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email'=> [
+            'email' => [
                 'required',
                 'email',
             ],
             'password' => [
                 'required',
-            ]
+            ],
         ];
     }
 

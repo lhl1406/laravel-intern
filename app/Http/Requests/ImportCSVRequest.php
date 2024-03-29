@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Libs\ConfigUtil;
-use App\Rules\CheckEmptyFile;
 use App\Rules\CheckExtensionFileCSV;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,14 +24,14 @@ class ImportCSVRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => new CheckExtensionFileCSV(),'max:1024',
+            'file' => new CheckExtensionFileCSV(), 'max:1024',
         ];
     }
 
     public function messages()
     {
         return [
-            'file.max' =>  ConfigUtil::getMessage('EBT034', ['1MB']),
+            'file.max' => ConfigUtil::getMessage('EBT034', ['1MB']),
         ];
     }
 

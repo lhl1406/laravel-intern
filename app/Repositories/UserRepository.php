@@ -3,38 +3,39 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use App\Repositories\BaseRepository;
 use DateTime;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
-class UserRepository extends BaseRepository 
+class UserRepository extends BaseRepository
 {
-    public function getModel() {
+    public function getModel()
+    {
         return User::class;
     }
 
     /**
      * Get user list by condition search
-     * 
-     * @param array $conditionSearch
+     *
+     * @param  array  $conditionSearch
      * @param $limit default 10
      * @return @mixed $result
      */
-    public function getByConditionSearch($conditionSearch, $limit = 10) {
+    public function getByConditionSearch($conditionSearch, $limit = 10)
+    {
         $result = $this->model;
-       
-        if(isset($conditionSearch['started_date_from'])) {
+
+        if (isset($conditionSearch['started_date_from'])) {
             $dateTo = DateTime::createFromFormat('d/m/Y', $conditionSearch['started_date_from']);
-            $result =$result->where('started_date', ">=", $dateTo->format('Y-m-d'));
-        }
-        
-        if(isset($conditionSearch['started_date_to'])) {
-            $dateTo = DateTime::createFromFormat('d/m/Y', $conditionSearch['started_date_to']);
-            $result =$result->where('started_date', "<=", $dateTo->format('Y-m-d'));
+            $result = $result->where('started_date', '>=', $dateTo->format('Y-m-d'));
         }
 
-        if(isset($conditionSearch['name'])) {
+        if (isset($conditionSearch['started_date_to'])) {
+            $dateTo = DateTime::createFromFormat('d/m/Y', $conditionSearch['started_date_to']);
+            $result = $result->where('started_date', '<=', $dateTo->format('Y-m-d'));
+        }
+
+        if (isset($conditionSearch['name'])) {
             $result = $result->where('name', 'LIKE', '%'.$conditionSearch['name'].'%');
         }
 
@@ -43,7 +44,7 @@ class UserRepository extends BaseRepository
             ->orderBy('started_date')
             ->orderBy('id');
 
-        if(empty($limit)) {
+        if (empty($limit)) {
             return $result->whereNull('deleted_date')->get();
         }
 
@@ -52,22 +53,23 @@ class UserRepository extends BaseRepository
 
     /**
      * Get user list by email
-     * 
+     *
      * @param string email
      * @param @mixed id
      * @return @mixed $result
      */
-    public function getByEmail(string $email, $id = null) {
-        if(isset($id)) {
+    public function getByEmail(string $email, $id = null)
+    {
+        if (isset($id)) {
             $result = $this->model->where('email', $email)
-            ->where('id', '!=', $id)
-            ->get();
+                ->where('id', '!=', $id)
+                ->get();
         } else {
             $result = $this->model->where('email', $email)
-            ->get();
+                ->get();
         }
-        
-        if($result) { 
+
+        if ($result) {
             return $result;
         }
 
@@ -76,21 +78,22 @@ class UserRepository extends BaseRepository
 
     /**
      * Get user list by email
-     * 
+     *
      * @param string email
      * @param @mixed id
      * @return @mixed $result
      */
-    public function dupllicateEmailForLogin(string $email) {
-        try{
+    public function dupllicateEmailForLogin(string $email)
+    {
+        try {
             $result = $this->model->where('email', $email)
                 ->whereNull('deleted_date')
                 ->get();
-            } catch (Exception $exption) {
-                Log::error($exption->getMessage()); 
+        } catch (Exception $exption) {
+            Log::error($exption->getMessage());
         }
-        
-        if($result) { 
+
+        if ($result) {
             return $result;
         }
 

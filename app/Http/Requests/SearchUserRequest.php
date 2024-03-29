@@ -16,14 +16,14 @@ class SearchUserRequest extends FormRequest
         return true;
     }
 
-   /**
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
-        $checkGreaterStart = DateTime::createFromFormat('d/m/Y', 
+        $checkGreaterStart = DateTime::createFromFormat('d/m/Y',
             $this->get('started_date_from')) ? '|after_or_equal:started_date_from' : '';
 
         return [
@@ -33,14 +33,15 @@ class SearchUserRequest extends FormRequest
         ];
     }
 
-     /**
+    /**
      * Get length of value by atrribute name
-     * 
-     * @param string $attributeName
-     * @return integer 
+     *
+     * @return int
      */
-    public function getLenghtOfValueByAttributeName(string $attributeName) {
+    public function getLenghtOfValueByAttributeName(string $attributeName)
+    {
         $attribute = $this->get($attributeName);
+
         return strlen($attribute);
     }
 

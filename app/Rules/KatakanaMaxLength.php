@@ -12,10 +12,9 @@ class KatakanaMaxLength implements ValidationRule
 
     /**
      * Create a new rule instance.
-     *
-     * @param $maxLength
      */
-    public function __construct($maxLength) {
+    public function __construct($maxLength)
+    {
         $this->maxLength = $maxLength;
     }
 
@@ -24,9 +23,10 @@ class KatakanaMaxLength implements ValidationRule
      *
      * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
-    public function validate(string $attribute, mixed $value, Closure $fail): void {
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
         if (mb_strlen($value) > $this->maxLength) {
-            $fail(ConfigUtil::getMessage('EBT002', [ ':attribute', $this->maxLength, mb_strlen($value)]));
+            $fail(ConfigUtil::getMessage('EBT002', [':attribute', $this->maxLength, mb_strlen($value)]));
         }
     }
 }

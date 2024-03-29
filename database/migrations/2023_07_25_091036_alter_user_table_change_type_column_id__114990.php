@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('user', function (Blueprint $table) {
             $table->dropPrimary('id');
             $table->dropColumn('id');
-            
+
         });
 
         Schema::table('user', function (Blueprint $table) {

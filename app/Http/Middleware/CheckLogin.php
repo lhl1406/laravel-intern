@@ -14,8 +14,9 @@ class CheckLogin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response { 
-        if(Auth::check() && Auth::user()->deleted_date == null) {
+    public function handle(Request $request, Closure $next): Response
+    {
+        if (Auth::check() && Auth::user()->deleted_date == null) {
             return $next($request);
         }
 
